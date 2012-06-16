@@ -1,3 +1,0 @@
-environment :bar do
-  gem "monkey", :args  => "--asplode"
-end
