@@ -14,6 +14,18 @@ Tunes.LibraryView = Em.View.extend({
   classNames: ['library']
 });
 
+Tunes.AlbumView = Em.View.extend({
+  templateName: 'album',
+
+  classNames: ['album']
+});
+
+Tunes.TrackView = Em.View.extend({
+  template: Em.Handlebars.compile("{{track.title}}"),
+
+  tagName: 'li'
+});
+
 Tunes.PlaylistView = Em.View.extend({
   templateName: 'playlist',
 
