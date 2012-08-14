@@ -41,8 +41,8 @@
       <nav>
         <button class="control play" style="">Play</button>
         <button class="control pause" style="display: none; ">Pause</button>
-        <button class="control prev">Prev</button>
-        <button class="control next">Next</button>
+        <button class="control prev" {{action prev}}>Prev</button>
+        <button class="control next" {{action next}}>Next</button>
       </nav>
       <ul class="albums">
         {{#each album in controller}}

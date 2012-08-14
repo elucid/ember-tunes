@@ -35,6 +35,14 @@ Tunes.Router = Em.Router.extend({
       dequeueAlbum: function(router, event) {
         var album = event.context;
         router.get('playlistController').dequeueAlbum(album);
+      },
+
+      prev: function(router) {
+        router.get('playlistController').prev();
+      },
+
+      next: function(router) {
+        router.get('playlistController').next();
       }
     })
   })
@@ -95,6 +103,28 @@ Tunes.PlaylistController = Em.ArrayController.extend({
 
   dequeueAlbum: function(album) {
     this.removeObject(album);
+  },
+
+  prev: function() {
+    var length = this.get('tracks.length');
+    var cti = this.get('_currentTrackIndex');
+
+    if (cti === 0) {
+      this.set('_currentTrackIndex', length - 1);
+    } else {
+      this.set('_currentTrackIndex', cti - 1);
+    }
+  },
+
+  next: function() {
+    var length = this.get('tracks.length');
+    var cti = this.get('_currentTrackIndex');
+
+    if (cti === length - 1) {
+      this.set('_currentTrackIndex', 0);
+    } else {
+      this.set('_currentTrackIndex', cti + 1);
+    }
   },
 
   currentTrack: function() {
