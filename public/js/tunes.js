@@ -1,4 +1,35 @@
-Tunes = Em.Application.create();
+Tunes = Em.Application.create({
+  ready: function() {
+    $.ajax({
+      url: '/albums.json',
+      success: function(data) {
+        var router = this.get('router');
+        router.get('libraryController').set('content', data);
+        router.transitionTo('ready');
+      },
+      context: this
+    });
+  }
+});
+
+Tunes.Router = Em.Router.extend({
+  enableLogging: true,
+
+  root: Em.Route.extend({
+    index: Em.Route.extend({
+      route: '/',
+
+      connectOutlets: function(router) {
+        var controller = router.get('applicationController');
+        controller.connectOutlet('library', 'library');
+        controller.connectOutlet('playlist', 'playlist', []);
+      }
+    }),
+
+    ready: Em.State.extend({
+    })
+  })
+});
 
 Tunes.ApplicationView = Em.View.extend({
   templateName: 'application',
@@ -32,14 +63,10 @@ Tunes.PlaylistView = Em.View.extend({
   classNames: ['playlist']
 });
 
-Tunes.libraryController = Em.ArrayController.create();
+Tunes.ApplicationController = Em.ArrayController.extend();
 
-Tunes.playlistController = Em.ArrayController.create({
-  contentBinding: 'Tunes.libraryController'
-});
+Tunes.LibraryController = Em.ArrayController.extend();
 
-$.getJSON('/albums', function(data){
-  Tunes.libraryController.set('content', data);
-});
+Tunes.PlaylistController = Em.ArrayController.extend();
 
 Tunes.initialize();

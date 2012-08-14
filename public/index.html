@@ -20,8 +20,8 @@
     <script src="js/tunes.js"></script>
 
     <script type="text/x-handlebars" data-template-name="application">
-      {{view Tunes.PlaylistView}}
-      {{view Tunes.LibraryView}}
+      {{outlet playlist}}
+      {{outlet library}}
     </script>
 
     <script type="text/x-handlebars" data-template-name="album">
@@ -45,7 +45,7 @@
         <button class="control next">Next</button>
       </nav>
       <ul class="albums">
-        {{#each album in Tunes.playlistController}}
+        {{#each album in controller}}
           {{view Tunes.AlbumView albumBinding="album"}}
         {{/each}}
       </ul>
@@ -54,7 +54,7 @@
     <script type="text/x-handlebars" data-template-name="library">
       <h1>Music Library</h1>
       <ul class="albums">
-        {{#each album in Tunes.libraryController}}
+        {{#each album in controller}}
           {{view Tunes.AlbumView albumBinding="album"}}
         {{/each}}
       </ul>
@@ -62,8 +62,5 @@
   </head>
 
   <body>
-    <script type="text/x-handlebars">
-      {{view Tunes.ApplicationView}}
-    </script>
   </body>
 </html>
