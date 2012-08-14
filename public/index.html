@@ -24,6 +24,16 @@
       {{outlet library}}
     </script>
 
+    <script type="text/x-handlebars" data-template-name="navbar">
+      {{#unless isPlaying}}
+        <button class="control play" {{action play}}>Play</button>
+      {{else}}
+        <button class="control pause" {{action pause}}>Pause</button>
+      {{/unless}}
+      <button class="control prev" {{action prev}}>Prev</button>
+      <button class="control next" {{action next}}>Next</button>
+    </script>
+
     <script type="text/x-handlebars" data-template-name="album">
       <button class="queue add" {{action queueAlbum album}}><img src="/images/add.png"></button>
       <button class="queue remove" {{action dequeueAlbum album}}><img src="/images/remove.png"></button>
@@ -38,12 +48,7 @@
 
     <script type="text/x-handlebars" data-template-name="playlist">
       <h1>Playlist</h1>
-      <nav>
-        <button class="control play" style="">Play</button>
-        <button class="control pause" style="display: none; ">Pause</button>
-        <button class="control prev" {{action prev}}>Prev</button>
-        <button class="control next" {{action next}}>Next</button>
-      </nav>
+      {{outlet navbar}}
       <ul class="albums">
         {{#each album in controller}}
           {{view Tunes.AlbumView albumBinding="album"}}

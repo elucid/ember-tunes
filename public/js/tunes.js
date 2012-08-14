@@ -16,6 +16,8 @@ Tunes.Router = Em.Router.extend({
   enableLogging: true,
 
   root: Em.Route.extend({
+    play: Em.K,
+    pause: Em.K,
     prev: Em.K,
     next: Em.K,
 
@@ -26,6 +28,14 @@ Tunes.Router = Em.Router.extend({
         var controller = router.get('applicationController');
         controller.connectOutlet('library', 'library');
         controller.connectOutlet('playlist', 'playlist', []);
+
+        router.get('playlistController').connectOutlet({
+          outletName: 'navbar',
+          viewClass: Tunes.NavbarView,
+          controller: router.get('audioController')
+        });
+
+        router.get('audioController').connectControllers('playlist');
       }
     }),
 
@@ -42,6 +52,8 @@ Tunes.Router = Em.Router.extend({
       }),
 
       tracksQueued: Em.State.extend({
+        initialState: 'paused',
+
         dequeueAlbum: function(router, event) {
           var album = event.context;
           router.get('playlistController').dequeueAlbum(album);
@@ -49,13 +61,45 @@ Tunes.Router = Em.Router.extend({
 
         lastAlbumDequeued: Em.State.transitionTo('queueEmpty'),
 
-        prev: function(router) {
-          router.get('playlistController').prev();
-        },
+        playing: Em.State.extend({
+          enter: function(sm) {
+            sm.get('audioController').play();
+            sm.set('audioController.isPlaying', true);
+          },
 
-        next: function(router) {
-          router.get('playlistController').next();
-        }
+          pause: function(sm) {
+            sm.transitionTo('paused');
+          },
+
+          prev:  function(sm) {
+            sm.get('playlistController').prev();
+            sm.get('audioController').play();
+          },
+
+          next:  function(sm) {
+            sm.get('playlistController').next();
+            sm.get('audioController').play();
+          }
+        }),
+
+        paused: Em.State.extend({
+          enter: function(sm) {
+            sm.get('audioController').pause();
+            sm.set('audioController.isPlaying', false);
+          },
+
+          play:  function(sm) {
+            sm.transitionTo('playing');
+          },
+
+          prev:  function(sm) {
+            sm.get('playlistController').prev();
+          },
+
+          next:  function(sm) {
+            sm.get('playlistController').next();
+          }
+        })
       })
     })
   })
@@ -99,6 +143,12 @@ Tunes.TrackView = Em.View.extend({
   }.property('track', 'controller.currentTrack')
 });
 
+Tunes.NavbarView = Em.View.extend({
+  templateName: 'navbar',
+
+  tagName: 'nav'
+});
+
 Tunes.PlaylistView = Em.View.extend({
   templateName: 'playlist',
 
@@ -108,6 +158,53 @@ Tunes.PlaylistView = Em.View.extend({
 Tunes.ApplicationController = Em.ArrayController.extend();
 
 Tunes.LibraryController = Em.ArrayController.extend();
+
+Tunes.AudioController = Em.Controller.extend({
+  init: function(){
+    var audio = new Audio();
+
+    audio.addEventListener('ended', function() {
+      this.get('target').send('next');
+    }.bind(this));
+
+    this.set('audio', audio);
+
+    this._super();
+  },
+
+  play: function() {
+    // queue playing the track until the beginning of the next
+    // runloop to ensure currentTrack and audio src have been updated
+    Em.run.next(this, function() {
+      this.get('audio').play();
+    });
+  },
+
+  pause: function() {
+    this.get('audio').pause();
+  },
+
+  currentTrackChanged: function() {
+    var newUrl = this.get('currentTrack.url');
+    var audio  = this.get('audio');
+
+    // note: we have to do this because observer fires whenever
+    // dependent properties of currentTrack change, not when
+    // the track itself changes.
+    // it might be possible to do this more simply in the future
+    // if/when observers are passed previous/new value arguments
+    if (audio && this.get('_currentTrackSource') !== newUrl) {
+      this.set('_currentTrackSource', newUrl);
+      audio.src = newUrl;
+    }
+  }.observes('currentTrack'),
+
+  currentTrackBinding: 'playlistController.currentTrack',
+
+  // kind of stupid, but when audio.src is set it automatically prepends
+  // the hostname, and we need to be able to compare the track source later
+  _currentTrackSource: null
+});
 
 Tunes.PlaylistController = Em.ArrayController.extend({
   queueAlbum: function(album) {
@@ -121,11 +218,40 @@ Tunes.PlaylistController = Em.ArrayController.extend({
     }
   },
 
+  // this is a bit more complicated than I would like. however,
+  // it's not terrible and I can't think of a simpler way to prevent
+  // the playing track from skipping due to currentTrack temporarily
+  // being set to undefined
   dequeueAlbum: function(album) {
-    this.removeObject(album);
+    if (album === this.get('currentAlbum')) {
+      this.get('target').send('pause');
+    }
 
-    if (Em.empty(this.get('content'))) {
-      this.get('target').send('lastAlbumDequeued');
+    // grab current track before the tracklist gets rearranged
+    var currentTrack = this.get('currentTrack');
+
+    var albums = this.get('content');
+
+    // so that currentTrack is only updated once to the outside world
+    Em.beginPropertyChanges();
+
+    albums.removeObject(album);
+
+    // new position for current track after album was removed
+    var currentTrackIndex =
+      this.get('tracks').indexOf(currentTrack);
+
+    // reset currentTrack to first track if the currentTrack was just removed
+    if (currentTrackIndex === -1) {
+      currentTrackIndex = 0;
+    }
+
+    this.set('_currentTrackIndex', currentTrackIndex);
+
+    Em.endPropertyChanges();
+
+    if (Em.empty(albums)) {
+      this.get('target').send("lastAlbumDequeued");
     }
   },
 
