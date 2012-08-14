@@ -18,88 +18,96 @@
     <script src="js/vendor/handlebars-1.0.0.beta.6.js"></script>
     <script src="js/vendor/ember-1.0.pre.js"></script>
     <script src="js/tunes.js"></script>
+
+    <script type="text/x-handlebars" data-template-name="application">
+      {{view Tunes.PlaylistView}}
+      {{view Tunes.LibraryView}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="playlist">
+      <h1>Playlist</h1>
+      <nav>
+        <button class="control play" style="">Play</button>
+        <button class="control pause" style="display: none; ">Pause</button>
+        <button class="control prev">Prev</button>
+        <button class="control next">Next</button>
+      </nav>
+      <ul class="albums">
+        <div class="album current">
+          <button class="queue add"><img src="/images/add.png"></button>
+          <button class="queue remove"><img src="/images/remove.png"></button>
+          <span class="album-title">Bound - Zen Bound Ingame Music</span>&nbsp;&nbsp;
+          <span class="artist-name">Ghost Monkey</span>
+          <ol class="tracks">
+            <li class="current">Care</li>
+            <li>Rope and Wood</li>
+            <li>Problem Solvent</li>
+            <li>Unpaint My Skin</li>
+            <li>Nostalgia</li>
+            <li>Interludum</li>
+            <li>Grind</li>
+            <li>Diagrams</li>
+            <li>Hare</li>
+            <li>Carefree</li>
+            <li>Tunnel At The End Of Light</li>
+          </ol>
+        </div>
+        <div class="album">
+          <button class="queue add"><img src="/images/add.png"></button>
+          <button class="queue remove"><img src="/images/remove.png"></button>
+          <span class="album-title">Where the Earth Meets the Sky</span>&nbsp;&nbsp;
+          <span class="artist-name">Tom Heasley</span>
+          <ol class="tracks">
+            <li>Ground Zero</li>
+            <li>Western Sky</li>
+            <li>Monterey Bay</li>
+            <li>Where the Earth Meets the Sky</li>
+          </ol>
+        </div>
+      </ul>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="library">
+      <h1>Music Library</h1>
+      <ul class="albums">
+        <div class="album">
+          <button class="queue add"><img src="/images/add.png"></button>
+          <button class="queue remove"><img src="/images/remove.png"></button>
+          <span class="album-title">Bound - Zen Bound Ingame Music</span>&nbsp;&nbsp;
+          <span class="artist-name">Ghost Monkey</span>
+          <ol class="tracks">
+            <li>Care</li>
+            <li>Rope and Wood</li>
+            <li>Problem Solvent</li>
+            <li>Unpaint My Skin</li>
+            <li>Nostalgia</li>
+            <li>Interludum</li>
+            <li>Grind</li>
+            <li>Diagrams</li>
+            <li>Hare</li>
+            <li>Carefree</li>
+            <li>Tunnel At The End Of Light</li>
+          </ol>
+        </div>
+        <div class="album">
+          <button class="queue add"><img src="/images/add.png"></button>
+          <button class="queue remove"><img src="/images/remove.png"></button>
+          <span class="album-title">Where the Earth Meets the Sky</span>&nbsp;&nbsp;
+          <span class="artist-name">Tom Heasley</span>
+          <ol class="tracks">
+            <li>Ground Zero</li>
+            <li>Western Sky</li>
+            <li>Monterey Bay</li>
+            <li>Where the Earth Meets the Sky</li>
+          </ol>
+        </div>
+      </ul>
+    </script>
   </head>
 
   <body>
-    <div id="container">
-      <div class="playlist">
-        <h1>Playlist</h1>
-        <nav>
-          <button class="control play" style="">Play</button>
-          <button class="control pause" style="display: none; ">Pause</button>
-          <button class="control prev">Prev</button>
-          <button class="control next">Next</button>
-        </nav>
-        <ul class="albums">
-          <div class="album current">
-            <button class="queue add"><img src="/images/add.png"></button>
-            <button class="queue remove"><img src="/images/remove.png"></button>
-            <span class="album-title">Bound - Zen Bound Ingame Music</span>&nbsp;&nbsp;
-            <span class="artist-name">Ghost Monkey</span>
-            <ol class="tracks">
-              <li class="current">Care</li>
-              <li>Rope and Wood</li>
-              <li>Problem Solvent</li>
-              <li>Unpaint My Skin</li>
-              <li>Nostalgia</li>
-              <li>Interludum</li>
-              <li>Grind</li>
-              <li>Diagrams</li>
-              <li>Hare</li>
-              <li>Carefree</li>
-              <li>Tunnel At The End Of Light</li>
-            </ol>
-          </div>
-          <div class="album">
-            <button class="queue add"><img src="/images/add.png"></button>
-            <button class="queue remove"><img src="/images/remove.png"></button>
-            <span class="album-title">Where the Earth Meets the Sky</span>&nbsp;&nbsp;
-            <span class="artist-name">Tom Heasley</span>
-            <ol class="tracks">
-              <li>Ground Zero</li>
-              <li>Western Sky</li>
-              <li>Monterey Bay</li>
-              <li>Where the Earth Meets the Sky</li>
-            </ol>
-          </div>
-        </ul>
-      </div>
-      <section class="library">
-        <h1>Music Library</h1>
-        <ul class="albums">
-          <div class="album">
-            <button class="queue add"><img src="/images/add.png"></button>
-            <button class="queue remove"><img src="/images/remove.png"></button>
-            <span class="album-title">Bound - Zen Bound Ingame Music</span>&nbsp;&nbsp;
-            <span class="artist-name">Ghost Monkey</span>
-            <ol class="tracks">
-              <li>Care</li>
-              <li>Rope and Wood</li>
-              <li>Problem Solvent</li>
-              <li>Unpaint My Skin</li>
-              <li>Nostalgia</li>
-              <li>Interludum</li>
-              <li>Grind</li>
-              <li>Diagrams</li>
-              <li>Hare</li>
-              <li>Carefree</li>
-              <li>Tunnel At The End Of Light</li>
-            </ol>
-          </div>
-          <div class="album">
-            <button class="queue add"><img src="/images/add.png"></button>
-            <button class="queue remove"><img src="/images/remove.png"></button>
-            <span class="album-title">Where the Earth Meets the Sky</span>&nbsp;&nbsp;
-            <span class="artist-name">Tom Heasley</span>
-            <ol class="tracks">
-              <li>Ground Zero</li>
-              <li>Western Sky</li>
-              <li>Monterey Bay</li>
-              <li>Where the Earth Meets the Sky</li>
-            </ol>
-          </div>
-        </ul>
-      </section>
-    </div>
+    <script type="text/x-handlebars">
+      {{view Tunes.ApplicationView}}
+    </script>
   </body>
 </html>
