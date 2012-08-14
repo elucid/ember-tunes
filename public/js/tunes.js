@@ -57,13 +57,25 @@ Tunes.LibraryView = Em.View.extend({
 Tunes.AlbumView = Em.View.extend({
   templateName: 'album',
 
-  classNames: ['album']
+  classNames: ['album'],
+
+  classNameBindings: ["isCurrent:current"],
+
+  isCurrent: function() {
+    return this.get('album') === this.get('controller.currentAlbum');
+  }.property('album', 'controller.currentAlbum')
 });
 
 Tunes.TrackView = Em.View.extend({
   template: Em.Handlebars.compile("{{track.title}}"),
 
-  tagName: 'li'
+  tagName: 'li',
+
+  classNameBindings: ['isCurrent:current'],
+
+  isCurrent: function() {
+    return this.get('track') === this.get('controller.currentTrack');
+  }.property('track', 'controller.currentTrack')
 });
 
 Tunes.PlaylistView = Em.View.extend({
@@ -83,7 +95,27 @@ Tunes.PlaylistController = Em.ArrayController.extend({
 
   dequeueAlbum: function(album) {
     this.removeObject(album);
-  }
+  },
+
+  currentTrack: function() {
+    return this.get('tracks').objectAt(this.get('_currentTrackIndex'));
+  }.property('_currentTrackIndex', 'tracks'),
+
+  currentAlbum: function() {
+    return this.get('currentTrack.album');
+  }.property('currentTrack'),
+
+  tracks: function() {
+    return this.get('content').reduce(function(res, album) {
+      var tracks = album.tracks.map(function(track){
+        return $.extend(track, {album: album});
+      });
+
+      return res.concat(tracks);
+    }, []);
+  }.property('content.@each'),
+
+  _currentTrackIndex: 0
 });
 
 Tunes.initialize();
