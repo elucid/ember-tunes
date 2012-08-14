@@ -16,6 +16,9 @@ Tunes.Router = Em.Router.extend({
   enableLogging: true,
 
   root: Em.Route.extend({
+    prev: Em.K,
+    next: Em.K,
+
     index: Em.Route.extend({
       route: '/',
 
@@ -27,23 +30,33 @@ Tunes.Router = Em.Router.extend({
     }),
 
     ready: Em.State.extend({
+      initialState: 'queueEmpty',
+
       queueAlbum: function(router, event) {
         var album = event.context;
         router.get('playlistController').queueAlbum(album);
       },
 
-      dequeueAlbum: function(router, event) {
-        var album = event.context;
-        router.get('playlistController').dequeueAlbum(album);
-      },
+      queueEmpty: Em.State.extend({
+        firstAlbumQueued: Em.State.transitionTo('tracksQueued')
+      }),
 
-      prev: function(router) {
-        router.get('playlistController').prev();
-      },
+      tracksQueued: Em.State.extend({
+        dequeueAlbum: function(router, event) {
+          var album = event.context;
+          router.get('playlistController').dequeueAlbum(album);
+        },
 
-      next: function(router) {
-        router.get('playlistController').next();
-      }
+        lastAlbumDequeued: Em.State.transitionTo('queueEmpty'),
+
+        prev: function(router) {
+          router.get('playlistController').prev();
+        },
+
+        next: function(router) {
+          router.get('playlistController').next();
+        }
+      })
     })
   })
 });
@@ -98,11 +111,22 @@ Tunes.LibraryController = Em.ArrayController.extend();
 
 Tunes.PlaylistController = Em.ArrayController.extend({
   queueAlbum: function(album) {
-    this.get('content').addObject(album);
+    var albums = this.get('content');
+    var isFirstAlbum = Em.empty(albums);
+
+    albums.addObject(album);
+
+    if (isFirstAlbum) {
+      this.get('target').send('firstAlbumQueued');
+    }
   },
 
   dequeueAlbum: function(album) {
     this.removeObject(album);
+
+    if (Em.empty(this.get('content'))) {
+      this.get('target').send('lastAlbumDequeued');
+    }
   },
 
   prev: function() {
