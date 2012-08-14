@@ -2,5 +2,5 @@ require './lib/init'
 
 desc "Run the server"
 task :server do
-  system "rackup config.ru"
+  system "rackup -s thin config.ru"
 end
