@@ -27,6 +27,15 @@ Tunes.Router = Em.Router.extend({
     }),
 
     ready: Em.State.extend({
+      queueAlbum: function(router, event) {
+        var album = event.context;
+        router.get('playlistController').queueAlbum(album);
+      },
+
+      dequeueAlbum: function(router, event) {
+        var album = event.context;
+        router.get('playlistController').dequeueAlbum(album);
+      }
     })
   })
 });
@@ -67,6 +76,14 @@ Tunes.ApplicationController = Em.ArrayController.extend();
 
 Tunes.LibraryController = Em.ArrayController.extend();
 
-Tunes.PlaylistController = Em.ArrayController.extend();
+Tunes.PlaylistController = Em.ArrayController.extend({
+  queueAlbum: function(album) {
+    this.get('content').addObject(album);
+  },
+
+  dequeueAlbum: function(album) {
+    this.removeObject(album);
+  }
+});
 
 Tunes.initialize();

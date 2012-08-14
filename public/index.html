@@ -25,8 +25,8 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="album">
-      <button class="queue add"><img src="/images/add.png"></button>
-      <button class="queue remove"><img src="/images/remove.png"></button>
+      <button class="queue add" {{action queueAlbum album}}><img src="/images/add.png"></button>
+      <button class="queue remove" {{action dequeueAlbum album}}><img src="/images/remove.png"></button>
       <span class="album-title">{{album.title}}</span>&nbsp;&nbsp;
       <span class="artist-name">{{album.artist}}</span>
       <ol class="tracks">
