@@ -20,4 +20,14 @@ Tunes.PlaylistView = Em.View.extend({
   classNames: ['playlist']
 });
 
+Tunes.libraryController = Em.ArrayController.create();
+
+Tunes.playlistController = Em.ArrayController.create({
+  contentBinding: 'Tunes.libraryController'
+});
+
+$.getJSON('/albums', function(data){
+  Tunes.libraryController.set('content', data);
+});
+
 Tunes.initialize();
