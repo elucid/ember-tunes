@@ -14,6 +14,19 @@
     <link rel="stylesheet" href="style/fancypants.css" media="screen, projection">
   </head>
   <body>
+    <script type="text/x-handlebars" data-template-name="application">
+      {{render playlist}}
+      {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="library">
+      library
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="playlist">
+      playlist
+    </script>
+
     <script src="js/vendor/jquery-1.9.1.min.js"></script>
     <script src="js/vendor/handlebars-1.0.rc.2.js"></script>
     <script src="js/vendor/ember-1.0.pre.4.js"></script>
