@@ -9,3 +9,13 @@ Tunes.IndexRoute = Ember.Route.extend({
     this.transitionTo('library');
   }
 });
+
+Tunes.PlaylistView = Em.View.extend({
+  classNames: ['playlist']
+});
+
+Tunes.LibraryView = Em.View.extend({
+  tagName: 'section',
+
+  classNames: ['library']
+});
