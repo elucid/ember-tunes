@@ -21,7 +21,11 @@
 
     <script type="text/x-handlebars" data-template-name="library">
       <h1>Music Library</h1>
-
+      <ul class="albums">
+        {{#each controller}}
+          <li class="album">{{template "album"}}</li>
+        {{/each}}
+      </ul>
     </script>
 
     <script type="text/x-handlebars" data-template-name="playlist">
@@ -33,6 +37,13 @@
       <button class="control play">Play</button>
       <button class="control prev">Prev</button>
       <button class="control next">Next</button>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="album">
+      <button class="queue add"><img src="/images/add.png"></button>
+      <button class="queue remove"><img src="/images/remove.png"></button>
+      <span class="album-title">{{title}}</span>&nbsp;&nbsp;
+      <span class="artist-name">{{artist}}</span>
     </script>
 
     <script src="js/vendor/jquery-1.9.1.min.js"></script>
