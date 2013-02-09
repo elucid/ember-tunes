@@ -38,3 +38,5 @@ Tunes.LibraryView = Em.View.extend({
 Tunes.PlayerView = Em.View.extend({
   tagName: 'nav'
 });
+
+Tunes.PlaylistController = Em.ArrayController.extend();

@@ -31,6 +31,11 @@
     <script type="text/x-handlebars" data-template-name="playlist">
       <h1>Playlist</h1>
       {{render player}}
+      <ul class="albums">
+        {{#each controller}}
+          <li class="album">{{template "album"}}</li>
+        {{/each}}
+      </ul>
     </script>
 
     <script type="text/x-handlebars" data-template-name="player">
