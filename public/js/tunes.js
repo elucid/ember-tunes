@@ -12,6 +12,21 @@ Tunes.IndexRoute = Ember.Route.extend({
   }
 });
 
+Tunes.LibraryRoute = Ember.Route.extend({
+  model: function() {
+    var content = [];
+
+    $.ajax({
+      url: '/albums.json',
+      success: function(data) {
+        content.pushObjects(data);
+      }
+    });
+
+    return content;
+  }
+});
+
 Tunes.PlaylistView = Em.View.extend({
   classNames: ['playlist']
 });
