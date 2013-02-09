@@ -59,4 +59,13 @@ Tunes.PlayerView = Em.View.extend({
   tagName: 'nav'
 });
 
-Tunes.PlaylistController = Em.ArrayController.extend();
+Tunes.PlaylistController = Em.ArrayController.extend({
+  // NOTE: first CP! we are using instead of doing something similar to
+  // backbone screencast to avoid having the implementation diverge from
+  // domain model
+  tracks: function() {
+    return this.reduce(function(res, album) {
+      return res.concat(album.tracks);
+    }, []);
+  }.property('content.@each')
+});
