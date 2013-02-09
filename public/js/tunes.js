@@ -11,6 +11,14 @@ Tunes.ApplicationRoute = Ember.Route.extend({
   // PlaylistRoute, etc.
   setupController: function() {
     this.controllerFor('playlist').set('content', []);
+  },
+
+  events: {
+    // TODO: explain why we put this here instead of a controller
+    queueAlbum: function(album) {
+      // NOTE: we use addObject to prevent queueing duplicates
+      this.controllerFor('playlist').addObject(album);
+    }
   }
 });
 
