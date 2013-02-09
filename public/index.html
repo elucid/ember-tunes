@@ -49,6 +49,11 @@
       <button class="queue remove"><img src="/images/remove.png"></button>
       <span class="album-title">{{title}}</span>&nbsp;&nbsp;
       <span class="artist-name">{{artist}}</span>
+      <ol class="tracks">
+        {{#each tracks}}
+          <li>{{title}}</li>
+        {{/each}}
+      </ol>
     </script>
 
     <script src="js/vendor/jquery-1.9.1.min.js"></script>
