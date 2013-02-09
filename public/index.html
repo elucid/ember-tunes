@@ -26,7 +26,13 @@
 
     <script type="text/x-handlebars" data-template-name="playlist">
       <h1>Playlist</h1>
+      {{render player}}
+    </script>
 
+    <script type="text/x-handlebars" data-template-name="player">
+      <button class="control play">Play</button>
+      <button class="control prev">Prev</button>
+      <button class="control next">Next</button>
     </script>
 
     <script src="js/vendor/jquery-1.9.1.min.js"></script>
