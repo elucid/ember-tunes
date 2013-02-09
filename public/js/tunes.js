@@ -47,4 +47,10 @@ Tunes.PlayerView = Em.View.extend({
   tagName: 'nav'
 });
 
-Tunes.PlaylistController = Em.ArrayController.extend();
+Tunes.PlaylistController = Em.ArrayController.extend({
+  tracks: function() {
+    return this.reduce(function(res, album) {
+      return res.concat(album.tracks);
+    }, []);
+  }.property('content.@each')
+});
