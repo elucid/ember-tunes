@@ -4,6 +4,14 @@ Tunes.Router.map(function() {
   this.route('library');        // this is our default route
 });
 
+Tunes.ApplicationRoute = Ember.Route.extend({
+  events: {
+    queueAlbum: function(album) {
+      this.controllerFor('playlist').addObject(album);
+    }
+  }
+});
+
 Tunes.IndexRoute = Ember.Route.extend({
   redirect: function() {
     this.transitionTo('library');
