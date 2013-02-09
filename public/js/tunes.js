@@ -19,3 +19,7 @@ Tunes.LibraryView = Em.View.extend({
 
   classNames: ['library']
 });
+
+Tunes.PlayerView = Em.View.extend({
+  tagName: 'nav'
+});
