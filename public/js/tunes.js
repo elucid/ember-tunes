@@ -60,11 +60,25 @@ Tunes.PlayerView = Em.View.extend({
 });
 
 Tunes.PlaylistController = Em.ArrayController.extend({
+  currentTrack: null,
+
+  // Automatically reset currentTrack When the playlist
+  // is populated for the first time or emptied
+  defaultCurrentTrackObserver: function() {
+    if (this.get('tracks.length')) {
+      if (!this.get('currentTrack')) {
+      this.set('currentTrack', this.get('tracks.firstObject'));
+      }
+    } else {
+      this.set('currentTrack', null);
+    }
+  }.observes('tracks.length'),
+
   // NOTE: first CP! we are using instead of doing something similar to
   // backbone screencast to avoid having the implementation diverge from
   // domain model
   tracks: function() {
-    return this.reduce(function(res, album) {
+    return (this.get('content') || []).reduce(function(res, album) {
       return res.concat(album.tracks);
     }, []);
   }.property('content.@each')
