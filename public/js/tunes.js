@@ -61,6 +61,30 @@ Tunes.PlayerView = Em.View.extend({
 Tunes.PlaylistController = Em.ArrayController.extend({
   currentTrack: null,
 
+  prev: function() {
+    this.set('currentTrack', this.get('prevTrack'));
+  },
+
+  next: function() {
+    this.set('currentTrack', this.get('nextTrack'));
+  },
+
+  prevTrack: function() {
+    var tracks = this.get('tracks');
+    var currentIndex = tracks.indexOf(this.get('currentTrack'));
+    var prevIndex = currentIndex === 0 ? tracks.length - 1 : currentIndex - 1;
+
+    return tracks.objectAt(prevIndex);
+  }.property('tracks', 'currentTrack'),
+
+  nextTrack: function() {
+    var tracks = this.get('tracks');
+    var currentIndex = tracks.indexOf(this.get('currentTrack'));
+    var nextIndex = currentIndex === (tracks.length - 1) ? 0 : currentIndex + 1;
+
+    return tracks.objectAt(nextIndex);
+  }.property('tracks', 'currentTrack'),
+
   currentAlbum: function() {
     return this.get('currentTrack.album');
   }.property('currentTrack'),
