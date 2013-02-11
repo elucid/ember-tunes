@@ -73,6 +73,61 @@ Tunes.PlayerView = Em.View.extend({
   tagName: 'nav'
 });
 
+Tunes.PlayerController = Em.Controller.extend({
+  needs: ['playlist'],
+
+  currentTrack: null,
+  currentTrackBinding: 'controllers.playlist.currentTrack',
+
+  isPlaying: false,
+
+  init: function(){
+    this._super();
+
+    var audio = new Audio();
+
+    audio.addEventListener('ended', function() {
+      this.next();
+    }.bind(this));
+
+    this.set('audio', audio);
+  },
+
+  play: function() {
+    // NOTE: queue playing the track until the beginning of the next
+    // runloop to ensure currentTrack and audio src have been updated
+    // TODO: I would expect Em.run.schedule('sync', ...) to also work
+    // but it does not. Find out why.
+    Em.run.next(this, function() {
+      this.get('audio').play();
+      this.set('isPlaying', true);
+    });
+  },
+
+  pause: function() {
+    this.get('audio').pause();
+    this.set('isPlaying', false);
+  },
+
+  currentTrackChanged: function() {
+    this.get('audio').src = this.get('currentTrack.url');
+  }.observes('currentTrack'),
+
+  prev: function() {
+    this.get('target').send('prev');
+    if (this.get('isPlaying')) {
+      this.play();
+    }
+  },
+
+  next: function() {
+    this.get('target').send('next');
+    if (this.get('isPlaying')) {
+      this.play();
+    }
+  }
+});
+
 Tunes.PlaylistController = Em.ArrayController.extend({
   // NOTE: as of 50a765a there is a bug related to using the itemController
   // argument to the handlebars each helper. We would hit it in this case
