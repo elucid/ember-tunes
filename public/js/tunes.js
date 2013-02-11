@@ -87,3 +87,23 @@ Tunes.PlaylistController = Em.ArrayController.extend({
     }, []);
   }.property('content.@each')
 });
+
+Tunes.PlaylistAlbumController = Em.ObjectController.extend({
+  needs: ['playlist'],
+
+  currentAlbum: Em.computed.alias('controllers.playlist.currentAlbum'),
+
+  current: function() {
+    return this.get('content') === this.get('currentAlbum');
+  }.property('content', 'currentAlbum')
+});
+
+Tunes.PlaylistTrackController = Em.ObjectController.extend({
+  needs: ['playlist'],
+
+  currentTrack: Em.computed.alias('controllers.playlist.currentTrack'),
+
+  current: function() {
+    return this.get('content') === this.get('currentTrack');
+  }.property('content', 'currentTrack')
+});
