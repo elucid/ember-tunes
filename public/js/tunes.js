@@ -24,8 +24,15 @@ Tunes.LibraryRoute = Ember.Route.extend({
 
     $.ajax({
       url: '/albums.json',
-      success: function(data) {
-        content.pushObjects(data);
+      success: function(albums) {
+        var albums = albums.map(function(album){
+          var tracks = album.tracks.map(function(track){
+            return $.extend(track, {album: album});
+          });
+          return $.extend(album, {tracks: tracks});
+        });
+
+        content.pushObjects(albums);
       }
     });
 
@@ -49,6 +56,10 @@ Tunes.PlayerView = Em.View.extend({
 
 Tunes.PlaylistController = Em.ArrayController.extend({
   currentTrack: null,
+
+  currentAlbum: function() {
+    return this.get('currentTrack.album');
+  }.property('currentTrack'),
 
   addObject: function(album) {
     this.get('content').addObject(album);
