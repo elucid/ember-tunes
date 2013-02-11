@@ -36,8 +36,18 @@ Tunes.LibraryRoute = Ember.Route.extend({
 
     $.ajax({
       url: '/albums.json',
-      success: function(data) {
-        content.pushObjects(data);
+      success: function(albums) {
+        // NOTE: this is a small workaround so that tracks can refer back to
+        // their parent albums. It would not be necessary if we were using
+        // Ember Data.
+        var albums = albums.map(function(album){
+          var tracks = album.tracks.map(function(track){
+            return $.extend(track, {album: album});
+          });
+          return $.extend(album, {tracks: tracks});
+        });
+
+        content.pushObjects(albums);
       }
     });
 
@@ -61,6 +71,10 @@ Tunes.PlayerView = Em.View.extend({
 
 Tunes.PlaylistController = Em.ArrayController.extend({
   currentTrack: null,
+
+  currentAlbum: function() {
+    return this.get('currentTrack.album');
+  }.property('currentTrack'),
 
   // Automatically reset currentTrack When the playlist
   // is populated for the first time or emptied
