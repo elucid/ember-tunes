@@ -33,7 +33,7 @@
       {{render player}}
       <ul class="albums">
         {{#each controller}}
-          <li class="album">{{template "album"}}</li>
+          <li {{bindAttr class=":album current"}}>{{template "album"}}</li>
         {{/each}}
       </ul>
     </script>
@@ -50,8 +50,8 @@
       <span class="album-title">{{title}}</span>&nbsp;&nbsp;
       <span class="artist-name">{{artist}}</span>
       <ol class="tracks">
-        {{#each tracks}}
-          <li>{{title}}</li>
+        {{#each tracks itemController="playlistTrack"}}
+          <li {{bindAttr class="current"}}>{{title}}</li>
         {{/each}}
       </ol>
     </script>

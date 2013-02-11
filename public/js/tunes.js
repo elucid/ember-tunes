@@ -70,6 +70,11 @@ Tunes.PlayerView = Em.View.extend({
 });
 
 Tunes.PlaylistController = Em.ArrayController.extend({
+  // NOTE: as of 50a765a there is a bug related to using the itemController
+  // argument to the handlebars each helper. We would hit it in this case
+  // so we will instead specify the property on the parent ArrayController
+  itemController: 'playlistAlbum',
+
   currentTrack: null,
 
   currentAlbum: function() {
@@ -96,4 +101,28 @@ Tunes.PlaylistController = Em.ArrayController.extend({
       return res.concat(album.tracks);
     }, []);
   }.property('content.@each')
+});
+
+Tunes.PlaylistAlbumController = Em.ObjectController.extend({
+  needs: ['playlist'],
+
+  // TODO: is this best practice?
+  currentAlbum: null,
+  currentAlbumBinding: 'controllers.playlist.currentAlbum',
+
+  current: function() {
+    return this.get('content') === this.get('currentAlbum');
+  }.property('content', 'currentAlbum')
+});
+
+Tunes.PlaylistTrackController = Em.ObjectController.extend({
+  needs: ['playlist'],
+
+  // TODO: is this best practice?
+  currentTrack: null,
+  currentTrackBinding: 'controllers.playlist.currentTrack',
+
+  current: function() {
+    return this.get('content') === this.get('currentTrack');
+  }.property('content', 'currentTrack')
 });
