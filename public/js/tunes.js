@@ -169,7 +169,7 @@ Tunes.PlaylistController = Em.ArrayController.extend({
   defaultCurrentTrackObserver: function() {
     if (this.get('tracks.length')) {
       if (!this.get('currentTrack')) {
-      this.set('currentTrack', this.get('tracks.firstObject'));
+        this.set('currentTrack', this.get('tracks.firstObject'));
       }
     } else {
       this.set('currentTrack', null);
