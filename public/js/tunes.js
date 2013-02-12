@@ -73,13 +73,49 @@ Tunes.PlayerView = Em.View.extend({
   tagName: 'nav'
 });
 
+Tunes.PlayerStateManager = Em.StateManager.extend({
+  initialState: 'paused',
+
+  play: function(sm) {
+    sm.transitionTo('playing');
+  },
+
+  pause: function(sm) {
+    sm.transitionTo('paused');
+  },
+
+  paused: Em.State.extend({
+    bump: function(sm) {}
+  }),
+
+  playing: Em.State.extend({
+    isPlaying: true,
+
+    enter: function(sm) {
+      this.bump(sm);
+    },
+
+    exit: function(sm) {
+      sm.get('audio').pause();
+    },
+
+    bump: function(sm) {
+      if(sm.get('audio').src) {
+        sm.get('audio').play();
+      } else {
+        sm.send('pause');
+      }
+    }
+  })
+
+});
+
 Tunes.PlayerController = Em.Controller.extend({
   needs: ['playlist'],
 
   currentTrack: null,
   currentTrackBinding: 'controllers.playlist.currentTrack',
-
-  isPlaying: false,
+  isPlayingBinding: 'playerStateManager.currentState.isPlaying',
 
   init: function(){
     this._super();
@@ -91,40 +127,30 @@ Tunes.PlayerController = Em.Controller.extend({
     }.bind(this));
 
     this.set('audio', audio);
+
+    var playerStateManager = Tunes.PlayerStateManager.create({ audio: audio });
+    this.set('playerStateManager', playerStateManager);
   },
 
   play: function() {
-    // NOTE: queue playing the track until the beginning of the next
-    // runloop to ensure currentTrack and audio src have been updated
-    // TODO: I would expect Em.run.schedule('sync', ...) to also work
-    // but it does not. Find out why.
-    Em.run.next(this, function() {
-      this.get('audio').play();
-      this.set('isPlaying', true);
-    });
+    this.get('playerStateManager').send('play');
   },
 
   pause: function() {
-    this.get('audio').pause();
-    this.set('isPlaying', false);
+    this.get('playerStateManager').send('pause');
   },
 
   currentTrackChanged: function() {
     this.get('audio').src = this.get('currentTrack.url');
+    this.get('playerStateManager').send('bump')
   }.observes('currentTrack'),
 
   prev: function() {
     this.get('target').send('prev');
-    if (this.get('isPlaying')) {
-      this.play();
-    }
   },
 
   next: function() {
     this.get('target').send('next');
-    if (this.get('isPlaying')) {
-      this.play();
-    }
   }
 });
 
