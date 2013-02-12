@@ -76,8 +76,7 @@ Tunes.PlayerView = Em.View.extend({
 Tunes.PlayerController = Em.Controller.extend({
   needs: ['playlist'],
 
-  currentTrack: null,
-  currentTrackBinding: 'controllers.playlist.currentTrack',
+  currentTrack: Em.computed.alias('controllers.playlist.currentTrack'),
 
   isPlaying: false,
 
@@ -189,9 +188,7 @@ Tunes.PlaylistController = Em.ArrayController.extend({
 Tunes.PlaylistAlbumController = Em.ObjectController.extend({
   needs: ['playlist'],
 
-  // TODO: is this best practice?
-  currentAlbum: null,
-  currentAlbumBinding: 'controllers.playlist.currentAlbum',
+  currentAlbum: Em.computed.alias('controllers.playlist.currentAlbum'),
 
   current: function() {
     return this.get('content') === this.get('currentAlbum');
@@ -201,9 +198,7 @@ Tunes.PlaylistAlbumController = Em.ObjectController.extend({
 Tunes.PlaylistTrackController = Em.ObjectController.extend({
   needs: ['playlist'],
 
-  // TODO: is this best practice?
-  currentTrack: null,
-  currentTrackBinding: 'controllers.playlist.currentTrack',
+  currentTrack: Em.computed.alias('controllers.playlist.currentTrack'),
 
   current: function() {
     return this.get('content') === this.get('currentTrack');
