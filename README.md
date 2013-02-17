@@ -22,7 +22,11 @@ Background
 
 This app is a port of the application developed in the PeepCode Backbone screencasts https://peepcode.com/products/backbone-js and https://peepcode.com/products/backbone-ii
 
-It was assembled for a demo talk I gave at Toronto.rb on August 14, 2012. The code starts off at the final application developed in the second screencast. There are a few initial commits for cleanup and toolchain updates. Then, there are a series of numbered commits. These are intended to show a gradual approach to assembling the app. Each commit focuses on a fairly small bit of functionality and tries to limit the number of new concepts introduced. New features are often stubbed in or implemented naïvely and are gradually refined and improved upon in later commits.
+It was assembled for a presentation at the first EmberCamp. You can see slides for the presentation at http://justinappears.com/slides/ember-camp
+
+An earlier version was presented at toronto.rb
+
+The code starts off at the final application developed in the second screencast. There are a few initial commits for cleanup and toolchain updates. Then, there are a series of numbered commits. These are intended to show a gradual approach to assembling the app. Each commit focuses on a fairly small bit of functionality and tries to limit the number of new concepts introduced. New features are often stubbed in or implemented naïvely and are gradually refined and improved upon in later commits.
 
 
 Ember Best Practices(?)
